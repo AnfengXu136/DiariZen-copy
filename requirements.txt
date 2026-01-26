@@ -7,7 +7,6 @@ jupyterlab
 tensorboard
 librosa
 matplotlib
-numpy==1.26.4
 onnxruntime-gpu
 openpyxl # for saving results to excel
 pandas
@@ -23,3 +22,13 @@ torchinfo
 tqdm
 accelerate==1.6.0
 thop
+pyannote-core<6 
+pyannote-metrics<4
+pyannote.pipeline<4
+pytorch_lightning
+torch_audiomentations
+julius
+torch_pitch_shift
+transformers==4.40
+semver
+numpy==1.26.4

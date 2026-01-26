@@ -10,10 +10,11 @@ conda activate diarizen
 
 # install diarizen 
 conda install pytorch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 pytorch-cuda=12.1 -c pytorch -c nvidia
+conda install -y -c conda-forge "mkl<2024.1" "intel-openmp<2024.1"
 pip install -r requirements.txt && pip install -e .
 
 # install pyannote-audio
-cd pyannote-audio && pip install -e .[dev,testing]
+cd pyannote-audio && pip install -e .[dev,testing] --no-deps
 
 # install dscore
 git submodule init
