@@ -209,7 +209,6 @@ class Model(BaseModel):
         if os.path.isfile(source):
             # Load from checkpoint file
             ckpt = torch.load(source, map_location="cpu")
-
             if "config" not in ckpt or "state_dict" not in ckpt:
                 raise ValueError("Checkpoint must contain 'config' and 'state_dict'.")
 
@@ -265,9 +264,9 @@ class Model(BaseModel):
 
 
 if __name__ == '__main__':
-    wavlm_conf_name = 'wavlm_base_md_s80'
-    model = Model(wavlm_conf_name=wavlm_conf_name)
+    model = Model()
     print(model)
     x = torch.randn(2, 1, 32000)
     y = model(x)
+    import pdb; pdb.set_trace()
     print(f'y: {y.shape}')
