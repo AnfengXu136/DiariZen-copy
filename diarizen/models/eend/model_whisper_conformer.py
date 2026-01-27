@@ -210,8 +210,8 @@ class Model(BaseModel):
             output_hidden_states=True
         )
         self.embed_positions = copy.deepcopy(model.encoder.embed_positions.weight)
-        self.embed_positions.requires_grad = False
-
+        model.encoder.embed_positions = model.encoder.embed_positions.from_pretrained(self.embed_positions[:400])
+        model.encoder.embed_positions.requires_grad = False
 
         return model
 
@@ -234,7 +234,7 @@ class Model(BaseModel):
         
         # Move input_features to the same device as the model
         input_features = features.input_features.to(in_wav.device)
-        model.encoder.embed_positions = model.encoder.embed_positions.from_pretrained(self.embed_positions[:400])
+        
             
         # Use encoder only (we don't need decoder for feature extraction)
         outputs = model.encoder(input_features, output_hidden_states=True)
