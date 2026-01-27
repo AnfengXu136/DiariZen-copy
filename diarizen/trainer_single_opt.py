@@ -94,15 +94,9 @@ class Trainer:
         self.freeze_wavlm = self.trainer_config.get("freeze_wavlm", False)
         # wavlm 
         if self.freeze_wavlm:
-            logger.info("Freeze WavLM...")
+            logger.info("Freeze EEND Encoder...")
             # Support both wavlm_model and whisper_model
-            if hasattr(self.unwrap_model, 'wavlm_model'):
-                self.unwrap_model.freeze_by_name('wavlm_model')
-            elif hasattr(self.unwrap_model, 'whisper_model'):
-                self.unwrap_model.freeze_by_name('whisper_model')
-            else:
-                logger.warning("Model has neither 'wavlm_model' nor 'whisper_model' attribute. Skipping freeze.")
-
+            self.unwrap_model.freeze_by_name('encoder_model')
         # Dataset
         self.dataset_config = config["train_dataset"]["args"]
         self.chunk_size = self.dataset_config.get("chunk_size", 500)

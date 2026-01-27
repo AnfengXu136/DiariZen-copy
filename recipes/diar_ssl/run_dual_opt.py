@@ -37,13 +37,13 @@ def run(config, resume):
 
     optimizer_small = instantiate(
         config["optimizer_small"]["path"],
-        args={"params": model.wavlm_model.parameters()}
+        args={"params": model.encoder_model.parameters()}
         | config["optimizer_small"]["args"]
         | {"lr": config["optimizer_small"]["args"]["lr"]},
     )
     optimizer_big = instantiate(
         config["optimizer_big"]["path"],
-        args={"params": model.non_wavlm_parameters()}
+        args={"params": model.non_encoder_parameters()}
         | config["optimizer_big"]["args"]
         | {"lr": config["optimizer_big"]["args"]["lr"]},
     )
