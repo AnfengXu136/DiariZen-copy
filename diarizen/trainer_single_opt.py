@@ -95,7 +95,13 @@ class Trainer:
         # wavlm 
         if self.freeze_wavlm:
             logger.info("Freeze WavLM...")
-            self.unwrap_model.freeze_by_name('wavlm_model')
+            # Support both wavlm_model and whisper_model
+            if hasattr(self.unwrap_model, 'wavlm_model'):
+                self.unwrap_model.freeze_by_name('wavlm_model')
+            elif hasattr(self.unwrap_model, 'whisper_model'):
+                self.unwrap_model.freeze_by_name('whisper_model')
+            else:
+                logger.warning("Model has neither 'wavlm_model' nor 'whisper_model' attribute. Skipping freeze.")
 
         # Dataset
         self.dataset_config = config["train_dataset"]["args"]
@@ -424,7 +430,11 @@ class Trainer:
 
             self.set_models_to_train_mode()
             if self.freeze_wavlm:
-                self.unwrap_model.wavlm_model.eval()
+                # Keep frozen model in eval mode
+                if hasattr(self.unwrap_model, 'wavlm_model'):
+                    self.unwrap_model.wavlm_model.eval()
+                elif hasattr(self.unwrap_model, 'whisper_model'):
+                    self.unwrap_model.whisper_model.eval()
 
             training_epoch_output = []
 

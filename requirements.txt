@@ -29,6 +29,6 @@ pytorch_lightning
 torch_audiomentations
 julius
 torch_pitch_shift
-transformers==4.40
+transformers==4.30.2
 semver
 numpy==1.26.4
