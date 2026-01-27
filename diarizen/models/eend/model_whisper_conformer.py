@@ -54,7 +54,7 @@ class Model(BaseModel):
         self.selected_channel = selected_channel
 
         # whisper 
-        self.whisper_model = self.load_whisper(whisper_src)
+        self.encoder_model = self.load_whisper(whisper_src)
         self.feature_extractor = AutoFeatureExtractor.from_pretrained(whisper_src)
         self.weight_sum = nn.Linear(whisper_layer_num, 1, bias=False)
 
@@ -75,7 +75,7 @@ class Model(BaseModel):
         self.classifier = nn.Linear(attention_in, self.dimension)
         self.activation = self.default_activation()
 
-    def non_whisper_parameters(self):
+    def non_encoder_parameters(self):
         return [
             *self.weight_sum.parameters(),
             *self.proj.parameters(),
@@ -255,7 +255,7 @@ class Model(BaseModel):
         assert waveforms.dim() == 3
         waveforms = waveforms[:, self.selected_channel, :]
 
-        whisper_feat = self.wav2whisper(waveforms, self.whisper_model)
+        whisper_feat = self.wav2whisper(waveforms, self.encoder_model)
         whisper_feat = self.weight_sum(whisper_feat)
         whisper_feat = torch.squeeze(whisper_feat, -1)
 

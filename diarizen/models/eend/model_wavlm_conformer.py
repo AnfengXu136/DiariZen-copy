@@ -55,7 +55,7 @@ class Model(BaseModel):
         self.selected_channel = selected_channel
 
         # wavlm 
-        self.wavlm_model = self.load_wavlm(wavlm_src)
+        self.encoder_model = self.load_wavlm(wavlm_src)
         self.weight_sum = nn.Linear(wavlm_layer_num, 1, bias=False)
 
         self.proj = nn.Linear(wavlm_feat_dim, attention_in)
@@ -249,7 +249,7 @@ class Model(BaseModel):
         assert waveforms.dim() == 3
         waveforms = waveforms[:, self.selected_channel, :]
 
-        wavlm_feat = self.wav2wavlm(waveforms, self.wavlm_model)
+        wavlm_feat = self.wav2wavlm(waveforms, self.encoder_model)
         wavlm_feat = self.weight_sum(wavlm_feat)
         wavlm_feat = torch.squeeze(wavlm_feat, -1)
 
