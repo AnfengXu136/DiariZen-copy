@@ -272,8 +272,8 @@ class Model(BaseModel):
 
 
 if __name__ == '__main__':
-    whisper_src = 'openai/whisper-small'
-    model = Model(whisper_src=whisper_src)
+    whisper_src = 'openai/whisper-medium'
+    model = Model(whisper_src=whisper_src, whisper_layer_num=25, whisper_feat_dim=1024)
     print(model)
     x = torch.randn(2, 1, 8*16000)
     y = model(x)
