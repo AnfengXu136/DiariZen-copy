@@ -58,7 +58,8 @@ class Trainer(BaseTrainer):
         
         # skip batch if something went wrong for some reason
         if torch.isnan(loss):
-            return None
+            logger.warning(f"NaN loss detected at batch {batch_idx}, skipping backward pass")
+            return {"Loss": torch.tensor(0.0, device=loss.device)}
         
         self.accelerator.backward(loss)
 

@@ -470,7 +470,8 @@ class Trainer:
                 with self.accelerator.accumulate(self.model):
                     # You are responsible for calling `.backward()`, `.step()`, and `.zero_grad()` in your implementation
                     loss_dict = self.training_step(batch, batch_idx)
-                    training_epoch_output.append(loss_dict)
+                    if loss_dict is not None:
+                        training_epoch_output.append(loss_dict)
 
                     if not self.accelerator.optimizer_step_was_skipped:
                         if self.warmup_steps > 0:
