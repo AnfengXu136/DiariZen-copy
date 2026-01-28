@@ -99,6 +99,11 @@ class Trainer:
             logger.info("Freeze WavLM...")
             self.unwrap_model.freeze_by_name('wavlm_model')
 
+        # Freeze encoder for first N epochs
+        self.freeze_encoder_epochs = self.trainer_config.get("freeze_encoder_epochs", 0)
+        if self.freeze_encoder_epochs > 0:
+            logger.info(f"Will freeze encoder parameters for the first {self.freeze_encoder_epochs} epochs")
+
         # Dataset
         self.dataset_config = config["train_dataset"]["args"]
         self.chunk_size = self.dataset_config.get("chunk_size", 500)
@@ -447,6 +452,18 @@ class Trainer:
             self.set_models_to_train_mode()
             if self.freeze_wavlm:
                 self.unwrap_model.wavlm_model.eval()
+
+            # Freeze encoder for first N epochs
+            if epoch <= self.freeze_encoder_epochs:
+                self.unwrap_model.encoder_model.eval()
+                for param in self.unwrap_model.encoder_model.parameters():
+                    param.requires_grad = False
+                logger.info(f"Freezing encoder parameters for epoch {epoch}...")
+            elif epoch == self.freeze_encoder_epochs + 1 and self.freeze_encoder_epochs > 0:
+                self.unwrap_model.encoder_model.train()
+                for param in self.unwrap_model.encoder_model.parameters():
+                    param.requires_grad = True
+                logger.info(f"Unfreezing encoder parameters from epoch {epoch}...")
 
             training_epoch_output = []
 
