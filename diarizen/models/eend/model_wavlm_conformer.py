@@ -75,7 +75,7 @@ class Model(BaseModel):
         self.classifier = nn.Linear(attention_in, self.dimension)
         self.activation = self.default_activation()
 
-    def non_wavlm_parameters(self):
+    def non_encoder_parameters(self):
         return [
             *self.weight_sum.parameters(),
             *self.proj.parameters(),
