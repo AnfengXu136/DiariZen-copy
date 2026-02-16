@@ -210,7 +210,7 @@ class Model(BaseModel):
             output_hidden_states=True
         )
         self.embed_positions = copy.deepcopy(model.encoder.embed_positions.weight)
-        model.encoder.embed_positions = model.encoder.embed_positions.from_pretrained(self.embed_positions[:400])
+        model.encoder.embed_positions = model.encoder.embed_positions.from_pretrained(self.embed_positions[:self.chunk_size * 50])
         model.encoder.embed_positions.requires_grad = False
 
         return model
