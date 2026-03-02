@@ -96,7 +96,10 @@ class Trainer:
         if self.freeze_wavlm:
             logger.info("Freeze EEND Encoder...")
             # Support both wavlm_model and whisper_model
-            self.unwrap_model.freeze_by_name('encoder_model')
+            if hasattr(self.unwrap_model, 'encoder_model'):
+                self.unwrap_model.freeze_by_name('encoder_model')
+            else:
+                self.unwrap_model.freeze_by_name('wavlm_model')
         # Dataset
         self.dataset_config = config["train_dataset"]["args"]
         self.chunk_size = self.dataset_config.get("chunk_size", 500)
